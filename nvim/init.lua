@@ -5,6 +5,21 @@ require("packer").startup(function(use)
 	use "ellisonleao/gruvbox.nvim"
   use "terrortylor/nvim-comment"
   use {
+    "akinsho/toggleterm.nvim",
+    tag = "*"
+  }
+  use {
+    "mg979/vim-visual-multi",
+    branch = "master"
+  }
+  use {
+    "kylechui/nvim-surround",
+    tag = "*",
+    config = function () 
+      require("nvim-surround").setup({})
+    end
+  }
+  use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate"
   }
@@ -83,15 +98,25 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 -- Neogit
 local neogit = require("neogit")
 neogit.setup {}
-
--- Bindings
-local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader><space>", builtin.find_files, {})
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-vim.keymap.set("n", "<leader>,", builtin.buffers, {})
-vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
-vim.keymap.set("n", "<leader>wv", ":vsplit<CR><C-w>l", { noremap = true })
 vim.keymap.set("n", "<leader>gg", neogit.open, {})
+
+-- Telescope
+local telescope = require("telescope.builtin")
+vim.keymap.set("n", "<leader><space>", telescope.find_files, {})
+vim.keymap.set("n", "<leader>fg", telescope.live_grep, {})
+vim.keymap.set("n", "<leader>,", telescope.buffers, {})
+vim.keymap.set("n", "<leader>fh", telescope.help_tags, {})
+
+-- Terminal
+local toggleterm = require("toggleterm")
+toggleterm.setup({
+  open_mapping = [[<leader>ot]]
+})
+
+-- Other bindings
+vim.keymap.set("n", "<leader>wv", ":vsplit<CR><C-w>l", { noremap = true })
+vim.keymap.set("n", "<leader>ww", ":wincmd w<CR>", { noremap = true })
+vim.keymap.set("n", "<leader><tab>n", ":tabnew<CR>", { noremap = true })
 
 -- Misc
 vim.opt.relativenumber = true
@@ -100,3 +125,4 @@ vim.o.expandtab = true
 vim.o.smartindent = true
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
+
