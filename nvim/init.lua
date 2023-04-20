@@ -4,6 +4,7 @@ require("packer").startup(function(use)
 	use "wbthomason/packer.nvim"
 	use "ellisonleao/gruvbox.nvim"
   use "terrortylor/nvim-comment"
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
   use {
     "akinsho/toggleterm.nvim",
     tag = "*"
@@ -95,6 +96,20 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end
 })
 
+-- DAP
+local dap, dapui = require("dap"), require("dapui")
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function() 
+  dapui.open()
+end
+dap.listeners.after.event_terminated["dapui_config"] = function() 
+  dapui.close()
+end
+dap.listeners.after.event_exited["dapui_config"] = function() 
+  dapui.close()
+end
+vim.keymap.set("n", "<leader>od", dapui.toggle, {})
+
 -- Neogit
 local neogit = require("neogit")
 neogit.setup {}
@@ -104,8 +119,9 @@ vim.keymap.set("n", "<leader>gg", neogit.open, {})
 local telescope = require("telescope.builtin")
 vim.keymap.set("n", "<leader><space>", telescope.find_files, {})
 vim.keymap.set("n", "<leader>fg", telescope.live_grep, {})
-vim.keymap.set("n", "<leader>,", telescope.buffers, {})
+vim.keymap.set("n", "<leader>,", telescope.oldfiles, {})
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, {})
+vim.keymap.set("n", "<leader>oc", telescope.commands, {})
 
 -- Terminal
 local toggleterm = require("toggleterm")
@@ -125,4 +141,3 @@ vim.o.expandtab = true
 vim.o.smartindent = true
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
-
