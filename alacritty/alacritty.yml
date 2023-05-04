@@ -13,24 +13,18 @@ font:
     x: 0
     y: 0
 
-
   glyph_offset:
     x: 0
     y: 0
-
 
 bell:
   animation: EaseOutExpo
   duration: 0
 
-
 window.opacity: 1.0
-
 
 cursor:
   style: Block
   unfocused_hollow: false
 
-
 live_config_reload: true
-

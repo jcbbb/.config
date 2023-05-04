@@ -76,16 +76,24 @@ vim.cmd[[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 
 -- LSP
 local lsp = require("lsp-zero").preset({})
-lsp.ensure_installed({ "gopls", "tsserver", "rust_analyzer" })
+lsp.ensure_installed({ "gopls", "tsserver", "rust_analyzer", "tailwindcss", "cssls", "emmet_ls" })
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+require("lspconfig").emmet_ls.setup({
+  capabilities = capabilities,
+  filetypes = { "html", "javascriptreact", "typescriptreact" },
+})
+
 lsp.setup()
 
 local cmp = require("cmp")
 cmp.setup({
   mapping = {
-   ["<CR>"] = cmp.mapping.confirm({ select = false })
+   ["<CR>"] = cmp.mapping.confirm({ select = true })
   }
 })
 
